@@ -3,13 +3,17 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
+    # paths:
+    #   - pb2/**
+    #   - protos/**
+    #   - server.py
   pull_request:
     branches: [ "main" ]
 
 env:
   DOCKER_USER: ${{secrets.DOCKER_USER}}
   DOCKER_TOKEN: ${{secrets.DOCKER_TOKEN}}
-  
+
 jobs:
   build:
     runs-on: ubuntu-latest
