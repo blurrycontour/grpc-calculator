@@ -1,4 +1,5 @@
 service = calculator
+image = grpc-calculator
 
 generate:
 	mkdir -p pb2
@@ -7,10 +8,15 @@ generate:
 	sed -i 's/$(service)_pb2/pb2.$(service)_pb2/' pb2/$(service)_pb2_grpc.py
 
 build:
-	docker build . -t calculator:latest
+	docker build . -t $(image):latest
 
 run:
-	docker run --rm -it --name calculator -p 50051:50051 calculator:latest
+	docker run --rm -it --name $(image) -p 50051:50051 $(image):latest
+
+push:
+	docker tag $(image):latest blurrycontour/$(image):latest
+	docker push blurrycontour/$(image):latest
+	docker rmi blurrycontour/$(image):latest
 
 clean:
 	rm -rf pb2/*
