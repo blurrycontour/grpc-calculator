@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package calculator;
+
+service Calculator {
+    rpc Add(CalcInput) returns (CalcOutput);
+    rpc Subtract(CalcInput) returns (CalcOutput);
+}
+
+message CalcInput {
+    float a = 1;
+    float b = 2;
+}
+message CalcOutput {
+    float out = 1;
+}
