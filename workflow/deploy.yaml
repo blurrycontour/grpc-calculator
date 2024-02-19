@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-calculator
+  labels:
+    app: grpc-calculator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grpc-calculator
+  template:
+    metadata:
+      labels:
+        app: grpc-calculator
+    spec:
+      containers:
+      - name: grpc-calculator-1
+        image: docker.io/blurrycontour/grpc-calculator:latest
