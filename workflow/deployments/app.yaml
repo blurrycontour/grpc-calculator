@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-calculator
+  labels:
+    app: grpc-calculator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grpc-calculator
+  template:
+    metadata:
+      labels:
+        app: grpc-calculator
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - grpc-calculator
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: grpc-calculator-1
+        image: docker.io/blurrycontour/grpc-calculator:latest
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 50m
+            memory: 64Mi

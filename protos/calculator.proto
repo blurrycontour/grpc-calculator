@@ -12,5 +12,6 @@ message CalcInput {
     float b = 2;
 }
 message CalcOutput {
-    float out = 1;
+    float result = 1;
+    string instance = 2;
 }

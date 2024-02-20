@@ -1,5 +1,6 @@
 from concurrent import futures
 import logging
+import uuid
 
 import grpc
 from grpc_reflection.v1alpha import reflection
@@ -9,20 +10,23 @@ from pb2 import (
     calculator_pb2_grpc
 )
 
+ID = str(uuid.uuid4())[:8]
+
+
 class Calculator(calculator_pb2_grpc.CalculatorServicer):
     def Add(self, request, context):
         a = request.a
         b = request.b
         print(f"Inputs: {a}, {b}")
         output = a + b
-        return calculator_pb2.CalcOutput(out=output)
+        return calculator_pb2.CalcOutput(result=output, instance=ID)
 
     def Subtract(self, request, context):
         a = request.a
         b = request.b
         print(f"Inputs: {a}, {b}")
         output = a - b
-        return calculator_pb2.CalcOutput(out=output)
+        return calculator_pb2.CalcOutput(result=output, instance=ID)
 
 def serve():
     port = "50051"

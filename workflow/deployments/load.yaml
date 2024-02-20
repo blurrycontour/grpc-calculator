@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: load-tester
+  labels:
+    app: load-tester
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: load-tester
+  template:
+    metadata:
+      labels:
+        app: load-tester
+    spec:
+      containers:
+      - name: load-tester-1
+        image: docker.io/fullstorydev/grpcurl:latest-alpine
+        command: [ "sh", "-c" ]
+        args:
+        - while true;
+          do
+            grpcurl -plaintext -d '{"a":1,"b":2}' grpc-calculator:443 calculator.Calculator/Add > /dev/null;
+            sleep 0;
+          done;
+        resources:
+          requests:
+            cpu: 50m
+            memory: 32Mi
+          limits:
+            cpu: 100m
+            memory: 32Mi

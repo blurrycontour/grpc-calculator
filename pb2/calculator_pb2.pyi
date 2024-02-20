@@ -13,7 +13,9 @@ class CalcInput(_message.Message):
     def __init__(self, a: _Optional[float] = ..., b: _Optional[float] = ...) -> None: ...
 
 class CalcOutput(_message.Message):
-    __slots__ = ("out",)
-    OUT_FIELD_NUMBER: _ClassVar[int]
-    out: float
-    def __init__(self, out: _Optional[float] = ...) -> None: ...
+    __slots__ = ("result", "instance")
+    RESULT_FIELD_NUMBER: _ClassVar[int]
+    INSTANCE_FIELD_NUMBER: _ClassVar[int]
+    result: float
+    instance: str
+    def __init__(self, result: _Optional[float] = ..., instance: _Optional[str] = ...) -> None: ...
