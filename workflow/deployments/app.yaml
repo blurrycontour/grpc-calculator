@@ -16,21 +16,24 @@ spec:
     spec:
       affinity:
         podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - grpc-calculator
-            topologyKey: "kubernetes.io/hostname"
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - grpc-calculator
+              topologyKey: "kubernetes.io/hostname"
       containers:
       - name: grpc-calculator-1
         image: docker.io/blurrycontour/grpc-calculator:latest
+        imagePullPolicy: Always
         resources:
           requests:
-            cpu: 50m
+            cpu: 150m
             memory: 64Mi
           limits:
-            cpu: 50m
+            cpu: 200m
             memory: 64Mi

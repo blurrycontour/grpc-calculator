@@ -20,3 +20,11 @@ make build
 make run
 make push
 ```
+
+## Load Testing
+Locally
+```bash
+docker run --rm -it --entrypoint sh fullstorydev/grpcurl:latest-alpine -c "while true; do grpcurl -plaintext -d '{\"a\":1, \"b\":2}' localhost:50051 calculator.Calculator/Add; sleep 0; done"
+```
+
+##
