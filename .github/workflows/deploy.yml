@@ -21,7 +21,9 @@ jobs:
       - name: Get current repo name
         run: echo "REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
       - name: Add IP to known_host
-        run: ssh-keyscan $SSH_IP >> ~/.ssh/known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan $SSH_IP >> ~/.ssh/known_hosts
       - name: Add ssh private key
         run: ssh-add - <<< "$SSH_KEY"
       - name: TEST SSH
