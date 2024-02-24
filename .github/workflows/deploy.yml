@@ -38,4 +38,4 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_gcp $SSH_USER@$SSH_IP "docker pull $DOCKER_USER/$REPO_NAME:latest"
       - name: Run new container
-        run: ssh -i ~/.ssh/id_gcp $SSH_USER@$SSH_IP "docker run -d --restart unless-stoped -p 80:50051 --name $REPO_NAME $DOCKER_USER/$REPO_NAME:latest"
+        run: ssh -i ~/.ssh/id_gcp $SSH_USER@$SSH_IP "docker run -d --restart unless-stopped -p 80:50051 --name $REPO_NAME $DOCKER_USER/$REPO_NAME:latest"
