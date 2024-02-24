@@ -31,10 +31,11 @@ jobs:
           echo "$SSH_KEY" > ~/.ssh/id_gcp
           chmod 0600 ~/.ssh/id_gcp
       - name: Stop existing containers
-        run: ssh -i ~/.ssh/id_gcp $SSH_USER@$SSH_IP 'docker ps -q --filter "name=$REPO_NAME" | xargs -r docker stop'
+        run: ssh -i ~/.ssh/id_gcp $SSH_USER@$SSH_IP "docker ps -q --filter 'name=$REPO_NAME' | xargs -r docker stop"
       - name: Remove existing containers
-        run: ssh -i ~/.ssh/id_gcp $SSH_USER@$SSH_IP 'docker ps -q --filter "name=$REPO_NAME" | xargs -r docker rm'
+        run: ssh -i ~/.ssh/id_gcp $SSH_USER@$SSH_IP "docker ps -q --filter 'name=$REPO_NAME' | xargs -r docker rm"
       - name: Pull latest image
-        run: ssh -i ~/.ssh/id_gcp $SSH_USER@$SSH_IP 'docker pull $DOCKER_USER/$REPO_NAME:latest'
+        run: |
+          ssh -i ~/.ssh/id_gcp $SSH_USER@$SSH_IP "docker pull $DOCKER_USER/$REPO_NAME:latest"
       - name: Run new container
-        run: ssh -i ~/.ssh/id_gcp $SSH_USER@$SSH_IP 'docker run -d --restart unless-stoped -p 80:50051 --name $REPO_NAME $DOCKER_USER/$REPO_NAME:latest'
+        run: ssh -i ~/.ssh/id_gcp $SSH_USER@$SSH_IP "docker run -d --restart unless-stoped -p 80:50051 --name $REPO_NAME $DOCKER_USER/$REPO_NAME:latest"
