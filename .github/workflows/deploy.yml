@@ -33,7 +33,7 @@ jobs:
       - name: Stop existing containers
         run: ssh -i ~/.ssh/id_gcp $SSH_USER@$SSH_IP "docker ps -q --filter 'name=$REPO_NAME' | xargs -r docker stop"
       - name: Remove existing containers
-        run: ssh -i ~/.ssh/id_gcp $SSH_USER@$SSH_IP "docker ps -q --filter 'name=$REPO_NAME' | xargs -r docker rm"
+        run: ssh -i ~/.ssh/id_gcp $SSH_USER@$SSH_IP "docker ps -q --filter 'name=$REPO_NAME' | xargs -r docker container rm"
       - name: Pull latest image
         run: ssh -i ~/.ssh/id_gcp $SSH_USER@$SSH_IP "docker pull $DOCKER_USER/$REPO_NAME:latest"
       - name: Run new container
