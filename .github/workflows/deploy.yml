@@ -25,7 +25,9 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan $SSH_IP >> ~/.ssh/known_hosts
       - name: Add ssh private key
-        run: ssh-add - <<< "$SSH_KEY"
+        run: |
+          eval $(ssh-agent)
+          ssh-add - <<< "$SSH_KEY"
       - name: TEST SSH
         run: ssh $SSH_USER:$SSH_IP pwd
       - name: Stop existing containers
