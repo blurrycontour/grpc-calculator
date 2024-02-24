@@ -28,15 +28,13 @@ jobs:
         run: |
           eval $(ssh-agent)
           ssh-add - <<< "$SSH_KEY"
-          # echo "$SSH_KEY" > ~/.ssh/id_gcp
-          # chmod 0600 ~/.ssh/id_gcp
-      - name: TEST SSH
-        run: ssh -i ~/.ssh/id_gcp $SSH_USER@$SSH_IP pwd
+          echo "$SSH_KEY" > ~/.ssh/id_gcp
+          chmod 0600 ~/.ssh/id_gcp
       - name: Stop existing containers
-        run: ssh $SSH_USER:$SSH_IP docker ps -q --filter "name=$REPO_NAME" | xargs -r docker stop
+        run: ssh $SSH_USER@$SSH_IP 'docker ps -q --filter "name=$REPO_NAME" | xargs -r docker stop'
       - name: Remove existing containers
-        run: docker ps -q --filter "name=$REPO_NAME" | xargs -r docker rm
+        run: ssh $SSH_USER@$SSH_IP 'docker ps -q --filter "name=$REPO_NAME" | xargs -r docker rm'
       - name: Pull latest image
-        run: docker pull $DOCKER_USER/$REPO_NAME:latest
+        run: ssh $SSH_USER@$SSH_IP 'docker pull $DOCKER_USER/$REPO_NAME:latest'
       - name: Run new container
-        run: docker run -d --restart unless-stoped -p 80:50051 --name $REPO_NAME $DOCKER_USER/$REPO_NAME:latest
+        run: ssh $SSH_USER@$SSH_IP 'docker run -d --restart unless-stoped -p 80:50051 --name $REPO_NAME $DOCKER_USER/$REPO_NAME:latest'
