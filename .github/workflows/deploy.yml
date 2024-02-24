@@ -1,0 +1,27 @@
+name: Deploy to GCE
+
+on:
+  workflow_dispatch:
+    inputs:
+      external-ip:
+        description: "External IP Address"
+        default: "0.0.0.0"
+
+env:
+  DOCKER_USER: ${{secrets.DOCKER_USER}}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get current repo name
+        run: echo "REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
+      - name: Stop existing containers
+        run: docker ps -q --filter "name=$REPO_NAME" | xargs -r docker stop
+      - name: Remove existing containers
+        run: docker ps -q --filter "name=$REPO_NAME" | xargs -r docker rm
+      - name: Pull latest image
+        run: docker pull $DOCKER_USER/$REPO_NAME:latest
+      - name: Run new container
+        run: docker run -d --restart unless-stoped -p 80:50051 --name $REPO_NAME $DOCKER_USER/$REPO_NAME:latest
