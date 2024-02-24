@@ -28,8 +28,8 @@ jobs:
         run: |
           eval $(ssh-agent)
           ssh-add - <<< "$SSH_KEY"
-          echo "$SSH_KEY" > ~/.ssh/id_gcp
-          chmod 0600 ~/.ssh/id_gcp
+          # echo "$SSH_KEY" > ~/.ssh/id_gcp
+          # chmod 0600 ~/.ssh/id_gcp
       - name: TEST SSH
         run: ssh -i ~/.ssh/id_gcp $SSH_USER@$SSH_IP pwd
       - name: Stop existing containers
