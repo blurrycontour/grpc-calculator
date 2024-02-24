@@ -3,12 +3,15 @@ name: Deploy to GCE
 on:
   workflow_dispatch:
     inputs:
-      external-ip:
+      external_ip:
         description: "External IP Address"
         default: "0.0.0.0"
 
 env:
   DOCKER_USER: ${{secrets.DOCKER_USER}}
+  SSH_USER: ${{secrets.SSH_USER}}
+  SSH_KEY: ${{secrets.SSH_KEY}}
+  SSH_IP: ${{ github.event.inputs.external_ip }}
 
 jobs:
   build:
@@ -17,8 +20,14 @@ jobs:
       - uses: actions/checkout@v3
       - name: Get current repo name
         run: echo "REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
+      - name: Add IP to known_host
+        run: ssh-keyscan $SSH_IP >> ~/.ssh/known_hosts
+      - name: Add ssh private key
+        run: ssh-add - <<< "$SSH_KEY"
+      - name: TEST SSH
+        run: ssh $SSH_USER:$SSH_IP pwd
       - name: Stop existing containers
-        run: docker ps -q --filter "name=$REPO_NAME" | xargs -r docker stop
+        run: ssh $SSH_USER:$SSH_IP docker ps -q --filter "name=$REPO_NAME" | xargs -r docker stop
       - name: Remove existing containers
         run: docker ps -q --filter "name=$REPO_NAME" | xargs -r docker rm
       - name: Pull latest image
