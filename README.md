@@ -1,6 +1,6 @@
-# grpc-calculator
+# A simple gRPC based calculator
 
-A basic grpc based calculator
+Simple calculator that uses gRPC protocol. Use server reflection to see available methods!
 
 ## Example in Postman
 ![image](docs/images/postman.png)
